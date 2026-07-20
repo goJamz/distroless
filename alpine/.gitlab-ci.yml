@@ -1,0 +1,16 @@
+include:
+  - component: $CI_SERVER_FQDN/cdso/cdso/review@main
+    inputs:
+      name: "distroless"
+      pipeline_type: "base-container"
+      cdso_branch: main
+
+get-packages:
+  stage: pre-build
+  image: registry.cdso.army.mil/cdso/containers/approved-base/alpine:3.22
+  script:
+    - sh tools/packages.sh
+  artifacts:
+    paths:
+    - packages.tgz
+    expire_in: 1 hour
