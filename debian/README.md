@@ -9,9 +9,9 @@ from packages obtained through the cDSO approved Debian parent image.
 The image contains only:
 
 - The Debian GNU C Library and runtime loader
+- GCC's low-level runtime support library required by Debian's GNU C Library
 - Basic network service definitions from `netbase`
 - The CA certificate bundle from the approved Debian parent
-- Debian release identity files
 - Essential user and group files
 - An unprivileged `user` account with UID 10000
 - The `/tmp` and `/home/user` directories supplied by the cDSO build pipeline
@@ -35,9 +35,9 @@ images must configure an exec-form `ENTRYPOINT` for their application.
 
 ## Releasing a Debian version
 
-Release tags use the form `debian-X.Y`. The package pipeline validates the tag,
-removes the `debian-` prefix, and uses the remaining version to select the
-approved Debian parent tag `vX.Y`.
+Release tags use the form `debian-X.Y`. The small version helper removes the
+`debian-` prefix so the package job and Docker build use the approved Debian
+parent tag `vX.Y`.
 
 For Debian 13:
 

@@ -8,9 +8,6 @@ include:
 variables:
   DEFAULT_DEBIAN_RELEASE_TAG: "debian-13.0"
 
-# Convert a distroless release tag such as debian-13.0 into the approved-base
-# image reference used by the package-assembly job. The fixed image below is
-# only a shell environment for this resolver; it is not the release parent.
 resolve-debian-version:
   stage: .pre
   image: registry.cdso.army.mil/cdso/containers/approved-base/debian:v13.0
@@ -31,7 +28,8 @@ get-packages:
     - sh tools/packages.sh
   artifacts:
     paths:
-      - identity.tgz
       - packages.tgz
       - symlinks.tgz
+    reports:
+      dotenv: debian.env
     expire_in: 1 hour
