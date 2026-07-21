@@ -1,4 +1,10 @@
-ARG REGISTRY=registry.cdso.army.mil/cdso/containers
+FROM scratch
 
-FROM ${REGISTRY}/approved-base/debian:v13.0 AS build
+# These archives are produced by the cDSO pipeline before the image build.
+ADD tmp_home.tar.gz /
+ADD packages.tgz /
+ADD symlinks.tgz /
+ADD identity.tgz /
 
+WORKDIR /home/user
+USER user

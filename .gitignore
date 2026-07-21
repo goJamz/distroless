@@ -220,3 +220,5 @@ __marimo__/
 .source-docs
 AGENTS.md
 .examples
+.codex
+.agents

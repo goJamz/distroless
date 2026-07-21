@@ -1,0 +1,37 @@
+include:
+  - component: $CI_SERVER_FQDN/cdso/cdso/review@main
+    inputs:
+      name: "distroless"
+      pipeline_type: "base-container"
+      cdso_branch: main
+
+variables:
+  DEFAULT_DEBIAN_RELEASE_TAG: "debian-13.0"
+
+# Convert a distroless release tag such as debian-13.0 into the approved-base
+# image reference used by the package-assembly job. The fixed image below is
+# only a shell environment for this resolver; it is not the release parent.
+resolve-debian-version:
+  stage: .pre
+  image: registry.cdso.army.mil/cdso/containers/approved-base/debian:v13.0
+  script:
+    - sh tools/version.sh debian.env
+  artifacts:
+    reports:
+      dotenv: debian.env
+    expire_in: 1 hour
+
+get-packages:
+  stage: pre-build
+  image: ${DEBIAN_PARENT_IMAGE}
+  needs:
+    - job: resolve-debian-version
+      artifacts: true
+  script:
+    - sh tools/packages.sh
+  artifacts:
+    paths:
+      - identity.tgz
+      - packages.tgz
+      - symlinks.tgz
+    expire_in: 1 hour

@@ -1,0 +1,31 @@
+trufflehog:
+  false_positives: [] # was used for dod certs
+  excluded_files: []
+deployment_level: "PRODUCTION"
+organization: "cdso"
+security_group: "dami_im"
+
+distroless:
+  project_type: "base"
+  dockerfile_folder: "."
+  container_lifespan: "MULTIPLE"
+  connection_context: "NONE"
+  container_spec:
+    root_user: >-
+      This distroless base explicitly selects the unprivileged user with UID
+      10000. Derivative images may replace that account when their runtime
+      requires a different user or group strategy.
+    non_minimized: ""
+  mitigations: []
+  semgrep:
+    exclusions: [] # rule exclusions
+    rule_sets: [] # will use 'community' by default
+    ignore: [] # files and paths to ignore, supports glob pattern: https://git-scm.com/docs/gitignore#_pattern_format
+  clamav:
+    false_positives: []
+  zap:
+    skip_reason: "This image is a base for derivative images and does not contain a network service to scan."
+    debug: false
+    cert_path: ""
+    port: 65534
+    service_ports: []
