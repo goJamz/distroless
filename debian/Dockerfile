@@ -18,13 +18,15 @@ RUN mkdir -p /tmp/packages /distroless && \
     ln -s /usr/lib64 /distroless/lib64 && \
     test -e /distroless/usr/lib64/ld-linux-x86-64.so.2
 
-# Add a non-root user and remove root login.
+# Add a non-root user, remove root login, and stage runtime directories.
 RUN useradd -m -u 10000 -g nogroup -s /usr/sbin/nologin user && \
-    sed -i 's|/root:/bin.*|:/usr/sbin/nologin|' /etc/passwd
+    sed -i 's|/root:/bin.*|:/usr/sbin/nologin|' /etc/passwd && \
+    mkdir -p /distroless/tmp /distroless/home/user && \
+    chmod 1777 /distroless/tmp && \
+    chown user:nogroup /distroless/home/user
 
 FROM scratch
 
-ADD tmp_home.tar.gz /
 COPY --from=build /distroless/ /
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /etc/passwd /etc/

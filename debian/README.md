@@ -14,7 +14,7 @@ The image contains only:
 - The CA certificate bundle from the approved Debian parent
 - Essential user and group files
 - An unprivileged `user` account with UID 10000
-- The `/tmp` and `/home/user` directories supplied by the cDSO build pipeline
+- Writable `/tmp` and `/home/user` directories created during the image build
 
 It does not contain a shell, package manager, or common diagnostic utilities.
 Applications must supply their executable and any additional runtime
