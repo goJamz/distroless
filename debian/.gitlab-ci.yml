@@ -5,16 +5,13 @@ include:
       pipeline_type: "base-container"
       cdso_branch: main
 
-variables:
-  DEFAULT_DEBIAN_VERSION: "13.0"
-
 debian-version:
   stage: pre-build
-  image: registry.cdso.army.mil/cdso/containers/approved-base/debian:v${DEFAULT_DEBIAN_VERSION}
+  image: registry.cdso.army.mil/cdso/containers/approved-base/debian:v13.0
   script:
     - |
       if [ -z "${CI_COMMIT_TAG:-}" ]; then
-        echo "DEBIAN_VERSION=${DEFAULT_DEBIAN_VERSION}" >> .buildargs
+        echo "DEBIAN_VERSION=13.0" >> .buildargs
       else
         echo "DEBIAN_VERSION=$(echo "$CI_COMMIT_TAG" | cut -d'-' -f2)" >> .buildargs
       fi
