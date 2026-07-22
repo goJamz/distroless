@@ -3,10 +3,11 @@ ARG DEBIAN_VERSION
 
 FROM ${REGISTRY}/approved-base/debian:v${DEBIAN_VERSION} AS build
 
+WORKDIR /tmp/packages
+
 # Select libgcc-s1's copyright provider from the active Debian release.
-RUN mkdir -p /tmp/packages /distroless && \
+RUN mkdir -p /distroless && \
     chmod 1777 /tmp/packages && \
-    cd /tmp/packages && \
     apt-get -qq update && \
     gcc_base="$(readlink /usr/share/doc/libgcc-s1)" && \
     apt-get download -qq netbase libc6 libgcc-s1 "$gcc_base" && \
