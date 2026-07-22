@@ -221,4 +221,6 @@ __marimo__/
 AGENTS.md
 .examples
 .codex
+.claude
 .agents
+MEMORY.md
