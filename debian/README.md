@@ -35,8 +35,9 @@ images must configure an exec-form `ENTRYPOINT` for their application.
 
 ## Releasing a Debian version
 
-Release tags use the form `debian-X.Y`. The small version helper removes the
-`debian-` prefix so the package job and Docker build use the approved Debian
+Release tags use the form `debian-X.Y`. The pre-build job removes the `debian-`
+prefix and writes `DEBIAN_VERSION=X.Y` to `.buildargs`. The cDSO pipeline
+passes that build argument to the Dockerfile, which selects the approved Debian
 parent tag `vX.Y`.
 
 For Debian 13:
@@ -58,7 +59,7 @@ exist before the release pipeline runs.
 
 ## Validation boundary
 
-Shell syntax, tag resolution, YAML structure, and Dockerfile structure can be
-checked locally. The approved Debian parent, cDSO registry, review component,
-image build, Dockerfile lint job, SBOM, and vulnerability scans are available
-only inside IL5 and must be validated there after copying the contribution.
+YAML and Dockerfile structure can be checked locally. The approved Debian
+parent, cDSO registry, review component, image build, Dockerfile lint job,
+SBOM, and vulnerability scans are available only inside IL5 and must be
+validated there after copying the contribution.

@@ -6,30 +6,19 @@ include:
       cdso_branch: main
 
 variables:
-  DEFAULT_DEBIAN_RELEASE_TAG: "debian-13.0"
+  DEFAULT_DEBIAN_VERSION: "13.0"
 
-resolve-debian-version:
-  stage: .pre
-  image: registry.cdso.army.mil/cdso/containers/approved-base/debian:v13.0
-  script:
-    - sh tools/version.sh debian.env
-  artifacts:
-    reports:
-      dotenv: debian.env
-    expire_in: 1 hour
-
-get-packages:
+debian-version:
   stage: pre-build
-  image: ${DEBIAN_PARENT_IMAGE}
-  needs:
-    - job: resolve-debian-version
-      artifacts: true
+  image: registry.cdso.army.mil/cdso/containers/approved-base/debian:v${DEFAULT_DEBIAN_VERSION}
   script:
-    - sh tools/packages.sh
+    - |
+      if [ -z "${CI_COMMIT_TAG:-}" ]; then
+        echo "DEBIAN_VERSION=${DEFAULT_DEBIAN_VERSION}" >> .buildargs
+      else
+        echo "DEBIAN_VERSION=$(echo "$CI_COMMIT_TAG" | cut -d'-' -f2)" >> .buildargs
+      fi
   artifacts:
     paths:
-      - packages.tgz
-      - symlinks.tgz
-    reports:
-      dotenv: debian.env
+      - .buildargs
     expire_in: 1 hour
